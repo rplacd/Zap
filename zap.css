@@ -1,0 +1,131 @@
+body{
+	background-color: #fff7e5;
+}
+
+/*
+	Topmost matter - the "top window". Bit like a console overlay.
+	
+*/
+
+#top-window {
+	font-size: 10pt;  /* we need to fix the size in order to recalculate heights properly! */
+	height: 14pt;
+
+	text-align: center;
+	white-space: pre;
+	color: white;
+	background-color: #422400;
+	overflow-y: hidden;
+	box-shadow: 2px 2px 4px rgba(50, 50, 50, 0.75);
+	padding-left: 10px;
+	padding-right: 10px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+/*
+	Something to fill up that margin to the right with.
+	Shares a lot in common with the infobox at the top.
+*/
+
+#control-surface {
+	position: fixed;
+
+	margin-left: 5px;
+	
+	background-color: #cc844f;
+	
+	box-shadow: 2px 2px 4px rgba(50, 50, 50, 0.75);
+	padding: 10px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+/*
+	Story file drop-zone.
+*/
+.drop-zone-initial {
+	text-align: center;
+	color: black;
+	
+
+	background-color: white;
+	padding: 5px;
+	border: dashed black;
+	border-radius: 5px;
+	
+	-webkit-transition-duration: .25s;
+}
+
+.drop-zone-tentative {
+/* Just copy .drop-zone-used for now... */
+	text-align: center;
+	color: #5E5E5E;
+
+	background-color: white;
+	padding: 5px;
+	border: dashed #5E5E5E;
+	border-radius: 5px;
+	
+	-webkit-transition-duration: .25s;
+}
+
+.drop-zone-used {	
+	text-align: center;
+	color: #5E5E5E;
+
+	background-color: white;
+	padding: 5px;
+	border: dashed #5E5E5E;
+	border-radius: 5px;
+	
+	-webkit-transition-duration: 1s;
+}
+
+/*
+	Computer and user "archival" text - the "chat log".
+*/
+
+.computer {
+	-webkit-transition-duration: 1s;
+	text-align: left;
+	font-size: 15px;
+	color: #422400;
+}
+
+.user-container {
+	text-align: right;
+}
+
+.user {
+	-webkit-transition-duration: 1s;
+	text-align: right;
+	font-size: 14px;	
+	border-width: 15px 25px 25px 15px;
+	color: #422400;
+	border-image: url(resources/user-bubble.png) 15 25 25 15 repeat repeat;
+
+	margin-top: 10px;
+	margin-left: 120px; /* hardcoded! I'd like a way of making margin-left = 100% without pushing the div right out. */
+
+	font-family: Georgia, serif;
+	font-weight: bold;
+}
+
+.input {
+	-webkit-transition-duration: 1s;
+	color: black;
+	text-align: right;
+	font-size: 14px;	
+	border-width: 15px 25px 25px 15px;
+	border-image: url(resources/active-bubble.png) 15 25 25 15 fill repeat repeat;
+	background-color: rgba(0, 0, 0, 0);
+	box-shadow: none;
+	overflow: hidden;
+
+	margin-top: 10px;
+	margin-left: 120px; /* hardcoded! see above in .user. */
+	
+	font-family: Georgia, serif;
+	font-weight: bold;
+}

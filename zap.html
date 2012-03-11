@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Zap!</title>
+	<link rel="stylesheet" href="bootstrap.css">
+	<link rel="stylesheet" href="zap.css">
+	<script src="libs/modernizr-latest.js" type="text/javascript"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script src="libs/bootstrap-modal.js" type="text/javascript"></script>
+	<script src="libs/underscore-min.js" type="text/javascript"></script>
+	<script src="libs/mustache.js" type="text/javascript"></script>
+	<script src="zap-ui.js" type="text/javascript"></script>
+	<script src="zap-guts.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	// setup DnD - this, of course, starts everything off...
+	// Most of this is just UI, though - look for the next comment to start you off...
+	$(document).ready(function() {
+		// We have a little FSM going on wrt to how the dropZone changes status:
+/*
++-----------------+    +-------------------+    +--------------+
+|drop-zone-initial|+-->|drop-zone-tentative|+-->|drop-zone-used|
++-----------------+    +-------------------+    +--------------+
+         ^                       +
+         +-----------------------+
+*/
+		var dropZone = $(".drop-zone-initial")[0];
+		dropZone.addEventListener("dragover", function(evt) {
+		    evt.stopPropagation();
+			evt.preventDefault();
+			
+			evt.dataTransfer.dropEffect = "copy";
+			dropZone.className = "drop-zone-tentative";
+		}, false);
+		dropZone.addEventListener("dragleave", function(evt) {
+		    evt.stopPropagation();
+			evt.preventDefault();
+			
+			if(!dropZoneUsed) {
+				dropZone.className = "drop-zone-initial"
+			} else {
+				dropZone.className = "drop-zone-used";
+			}
+		}, false);
+		dropZone.addEventListener("drop", function(evt) {
+		    evt.stopPropagation();
+			evt.preventDefault();
+			
+			dropZoneUsed = true;
+			dropZone.className = "drop-zone-used";
+			
+			// Alright, now actually do something with the dropped files 
+			var files = evt.dataTransfer.files; 
+
+			// Display the file used...
+			dropZone.innerHTML = files[0].name;
+
+			console.log(files);
+		}, false);
+		
+		// Set up mustache templates for computer and user entries in the log (this includes the surrounding structural "row" tag from Bootstrap.)
+		templates = {
+			computerEntry: "<div class=\"row\">\
+								<div class=\"computer-container span8\">\
+									<div class=\"computer\"> {{text}}\
+									</div>\
+								</div>\
+							</div>",
+			userEntry: "<div class=\"row\">\
+								<div class=\"user-container span8 offset4\">\
+									<div class=\"user\">{{text}}\
+									</div>\
+								</div>\
+							</div>", // see the onkeypress inline spec down there? Yeah, I hate using window.event too. 
+			inputRow: "<div class=\"row\">\
+							<div class=\"user-container span8 offset4\" style=\"text-align: right;\">\
+								<div class=\"input\" contenteditable=\"true\" onkeypress=\"log.lower.onKeyPressInInput(window.event)\">{{text}}\
+								</div>\
+							</div>\
+						</div>"
+		};
+
+		// Set up the UI manager.
+		log = new ZapLog($("#reusable-modal"), $("#log-container"), $("#top-window"));
+	});
+	</script>
+</head>
+
+<body>
+	<!-- Reusuable piece of DOM for modal dialogs. -->
+	<div id="reusable-modal" class="modal hide fade in">
+		<div class="modal-body">
+		</div>
+	</div>
+
+	<!-- This part of the DOM's controlled by zap-ui - don't alter its structure! -->
+	<div class="container">
+		<div class="row">
+			<div class="span12" id="top-window-container">
+				<div class="row" style="position: fixed;">
+					<div class="span12" id="top-window">This is a status window that story files can choose to use or ignore.</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="position:relative; top:20pt">
+			<div class="span12" id="log-container">
+				<!-- To be filled out by ZapUI. -->
+			</div>
+			<div class="span4">
+				<div id="control-surface">
+					<script type="text/javascript">dropZoneUsed = false;</script>
+					<div id="drop-zone" class="drop-zone-initial">Drop a Z-machine story file to get started</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+</html>
